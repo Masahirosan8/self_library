@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - './app:/usr/src/Self-Library'
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    tty: true
+    stdin_open: true
+    environment:
+      MYSQL_NAME: self-library-db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: db
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: self-library-db
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
